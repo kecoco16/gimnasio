@@ -1,0 +1,24 @@
+<style>
+body{
+	padding-top: 70px;
+	padding-bottom: 20px;
+}
+.box-principal{
+	margin-left: auto;
+	margin-right: auto;
+	width: 55%;
+}
+.titulo{
+	text-align: center;
+}
+.imagen-avatar{
+	height: 50px;
+	width: 50px;
+}
+.box-login{
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+</style>
