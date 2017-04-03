@@ -62,7 +62,7 @@ class medoo
 			if (
 				isset($this->port) &&
 				is_int($this->port * 1)
-			)
+				)
 			{
 				$port = $this->port;
 			}
@@ -78,58 +78,58 @@ class medoo
 			switch ($type)
 			{
 				case 'mariadb':
-					$type = 'mysql';
+				$type = 'mysql';
 
 				case 'mysql':
-					if ($this->socket)
-					{
-						$dsn = $type . ':unix_socket=' . $this->socket . ';dbname=' . $this->database_name;
-					}
-					else
-					{
-						$dsn = $type . ':host=' . $this->server . ($is_port ? ';port=' . $port : '') . ';dbname=' . $this->database_name;
-					}
+				if ($this->socket)
+				{
+					$dsn = $type . ':unix_socket=' . $this->socket . ';dbname=' . $this->database_name;
+				}
+				else
+				{
+					$dsn = $type . ':host=' . $this->server . ($is_port ? ';port=' . $port : '') . ';dbname=' . $this->database_name;
+				}
 
 					// Make MySQL using standard quoted identifier
-					$commands[] = 'SET SQL_MODE=ANSI_QUOTES';
-					break;
+				$commands[] = 'SET SQL_MODE=ANSI_QUOTES';
+				break;
 
 				case 'pgsql':
-					$dsn = $type . ':host=' . $this->server . ($is_port ? ';port=' . $port : '') . ';dbname=' . $this->database_name;
-					break;
+				$dsn = $type . ':host=' . $this->server . ($is_port ? ';port=' . $port : '') . ';dbname=' . $this->database_name;
+				break;
 
 				case 'sybase':
-					$dsn = 'dblib:host=' . $this->server . ($is_port ? ':' . $port : '') . ';dbname=' . $this->database_name;
-					break;
+				$dsn = 'dblib:host=' . $this->server . ($is_port ? ':' . $port : '') . ';dbname=' . $this->database_name;
+				break;
 
 				case 'oracle':
-					$dbname = $this->server ?
-						'//' . $this->server . ($is_port ? ':' . $port : ':1521') . '/' . $this->database_name :
-						$this->database_name;
+				$dbname = $this->server ?
+				'//' . $this->server . ($is_port ? ':' . $port : ':1521') . '/' . $this->database_name :
+				$this->database_name;
 
-					$dsn = 'oci:dbname=' . $dbname . ($this->charset ? ';charset=' . $this->charset : '');
-					break;
+				$dsn = 'oci:dbname=' . $dbname . ($this->charset ? ';charset=' . $this->charset : '');
+				break;
 
 				case 'mssql':
-					$dsn = strstr(PHP_OS, 'WIN') ?
-						'sqlsrv:server=' . $this->server . ($is_port ? ',' . $port : '') . ';database=' . $this->database_name :
-						'dblib:host=' . $this->server . ($is_port ? ':' . $port : '') . ';dbname=' . $this->database_name;
+				$dsn = strstr(PHP_OS, 'WIN') ?
+				'sqlsrv:server=' . $this->server . ($is_port ? ',' . $port : '') . ';database=' . $this->database_name :
+				'dblib:host=' . $this->server . ($is_port ? ':' . $port : '') . ';dbname=' . $this->database_name;
 
 					// Keep MSSQL QUOTED_IDENTIFIER is ON for standard quoting
-					$commands[] = 'SET QUOTED_IDENTIFIER ON';
-					break;
+				$commands[] = 'SET QUOTED_IDENTIFIER ON';
+				break;
 
 				case 'sqlite':
-					$dsn = $type . ':' . $this->database_file;
-					$this->username = null;
-					$this->password = null;
-					break;
+				$dsn = $type . ':' . $this->database_file;
+				$this->username = null;
+				$this->password = null;
+				break;
 			}
 
 			if (
 				in_array($type, explode(' ', 'mariadb mysql pgsql sybase mssql')) &&
 				$this->charset
-			)
+				)
 			{
 				$commands[] = "SET NAMES '" . $this->charset . "'";
 			}
@@ -139,7 +139,7 @@ class medoo
 				$this->username,
 				$this->password,
 				$this->option
-			);
+				);
 
 			foreach ($commands as $value)
 			{
@@ -252,9 +252,9 @@ class medoo
 	{
 		return (strpos($column, '#') === 0 && preg_match('/^[A-Z0-9\_]*\([^)]*\)$/', $string)) ?
 
-			$string :
+		$string :
 
-			$this->quote($string);
+		$this->quote($string);
 	}
 
 	protected function data_implode($data, $conjunctor, $outer_conjunctor = null)
@@ -268,11 +268,11 @@ class medoo
 			if (
 				preg_match("/^(AND|OR)(\s+#.*)?$/i", $key, $relation_match) &&
 				$type == 'array'
-			)
+				)
 			{
 				$wheres[] = 0 !== count(array_diff_key($value, array_keys(array_keys($value)))) ?
-					'(' . $this->data_implode($value, ' ' . $relation_match[ 1 ]) . ')' :
-					'(' . $this->inner_conjunct($value, ' ' . $relation_match[ 1 ], $conjunctor) . ')';
+				'(' . $this->data_implode($value, ' ' . $relation_match[ 1 ]) . ')' :
+				'(' . $this->inner_conjunct($value, ' ' . $relation_match[ 1 ], $conjunctor) . ')';
 			}
 			else
 			{
@@ -288,25 +288,25 @@ class medoo
 						switch ($type)
 						{
 							case 'NULL':
-								$wheres[] = $column . ' IS NOT NULL';
-								break;
+							$wheres[] = $column . ' IS NOT NULL';
+							break;
 
 							case 'array':
-								$wheres[] = $column . ' NOT IN (' . $this->array_quote($value) . ')';
-								break;
+							$wheres[] = $column . ' NOT IN (' . $this->array_quote($value) . ')';
+							break;
 
 							case 'integer':
 							case 'double':
-								$wheres[] = $column . ' != ' . $value;
-								break;
+							$wheres[] = $column . ' != ' . $value;
+							break;
 
 							case 'boolean':
-								$wheres[] = $column . ' != ' . ($value ? '1' : '0');
-								break;
+							$wheres[] = $column . ' != ' . ($value ? '1' : '0');
+							break;
 
 							case 'string':
-								$wheres[] = $column . ' != ' . $this->fn_quote($key, $value);
-								break;
+							$wheres[] = $column . ' != ' . $this->fn_quote($key, $value);
+							break;
 						}
 					}
 
@@ -384,25 +384,25 @@ class medoo
 					switch ($type)
 					{
 						case 'NULL':
-							$wheres[] = $column . ' IS NULL';
-							break;
+						$wheres[] = $column . ' IS NULL';
+						break;
 
 						case 'array':
-							$wheres[] = $column . ' IN (' . $this->array_quote($value) . ')';
-							break;
+						$wheres[] = $column . ' IN (' . $this->array_quote($value) . ')';
+						break;
 
 						case 'integer':
 						case 'double':
-							$wheres[] = $column . ' = ' . $value;
-							break;
+						$wheres[] = $column . ' = ' . $value;
+						break;
 
 						case 'boolean':
-							$wheres[] = $column . ' = ' . ($value ? '1' : '0');
-							break;
+						$wheres[] = $column . ' = ' . ($value ? '1' : '0');
+						break;
 
 						case 'string':
-							$wheres[] = $column . ' = ' . $this->fn_quote($key, $value);
-							break;
+						$wheres[] = $column . ' = ' . $this->fn_quote($key, $value);
+						break;
 					}
 				}
 			}
@@ -423,7 +423,7 @@ class medoo
 
 			$single_condition = array_diff_key($where, array_flip(
 				explode(' ', 'AND OR GROUP ORDER HAVING LIMIT LIKE MATCH')
-			));
+				));
 
 			if ($single_condition != array())
 			{
@@ -477,7 +477,7 @@ class medoo
 					if (
 						isset($ORDER[ 1 ]) &&
 						is_array($ORDER[ 1 ])
-					)
+						)
 					{
 						$where_clause .= ' ORDER BY FIELD(' . $this->column_quote($ORDER[ 0 ]) . ', ' . $this->array_quote($ORDER[ 1 ]) . ')';
 					}
@@ -516,7 +516,7 @@ class medoo
 					is_array($LIMIT) &&
 					is_numeric($LIMIT[ 0 ]) &&
 					is_numeric($LIMIT[ 1 ])
-				)
+					)
 				{
 					if ($this->database_type === 'pgsql')
 					{
@@ -548,7 +548,7 @@ class medoo
 		if (
 			isset($join_key[ 0 ]) &&
 			strpos($join_key[ 0 ], '[') === 0
-		)
+			)
 		{
 			$table_join = array();
 
@@ -557,7 +557,7 @@ class medoo
 				'<' => 'RIGHT',
 				'<>' => 'FULL',
 				'><' => 'INNER'
-			);
+				);
 
 			foreach($join as $sub_table => $relation)
 			{
@@ -586,11 +586,11 @@ class medoo
 								$joins[] = $this->prefix . (
 									strpos($key, '.') > 0 ?
 										// For ['tableB.column' => 'column']
-										'"' . str_replace('.', '"."', $key) . '"' :
+									'"' . str_replace('.', '"."', $key) . '"' :
 
 										// For ['column1' => 'column2']
-										$table . '."' . $key . '"'
-								) .
+									$table . '."' . $key . '"'
+									) .
 								' = ' .
 								'"' . (isset($match[ 5 ]) ? $match[ 5 ] : $match[ 3 ]) . '"."' . $value . '"';
 							}
@@ -614,7 +614,7 @@ class medoo
 					if (
 						is_array($join) &&
 						isset($column_fn)
-					)
+						)
 					{
 						$where = $join;
 						$columns = null;
@@ -674,7 +674,7 @@ class medoo
 
 		return $query ? $query->fetchAll(
 			(is_string($columns) && $columns != '*') ? PDO::FETCH_COLUMN : PDO::FETCH_ASSOC
-		) : false;
+			) : false;
 	}
 
 	public function insert($table, $datas)
@@ -699,26 +699,26 @@ class medoo
 				switch (gettype($value))
 				{
 					case 'NULL':
-						$values[] = 'NULL';
-						break;
+					$values[] = 'NULL';
+					break;
 
 					case 'array':
-						preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
+					preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
 
-						$values[] = isset($column_match[ 0 ]) ?
-							$this->quote(json_encode($value)) :
-							$this->quote(serialize($value));
-						break;
+					$values[] = isset($column_match[ 0 ]) ?
+					$this->quote(json_encode($value)) :
+					$this->quote(serialize($value));
+					break;
 
 					case 'boolean':
-						$values[] = ($value ? '1' : '0');
-						break;
+					$values[] = ($value ? '1' : '0');
+					break;
 
 					case 'integer':
 					case 'double':
 					case 'string':
-						$values[] = $this->fn_quote($key, $value);
-						break;
+					$values[] = $this->fn_quote($key, $value);
+					break;
 				}
 			}
 
@@ -752,26 +752,26 @@ class medoo
 				switch (gettype($value))
 				{
 					case 'NULL':
-						$fields[] = $column . ' = NULL';
-						break;
+					$fields[] = $column . ' = NULL';
+					break;
 
 					case 'array':
-						preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
+					preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
 
-						$fields[] = $column . ' = ' . $this->quote(
-								isset($column_match[ 0 ]) ? json_encode($value) : serialize($value)
-							);
-						break;
+					$fields[] = $column . ' = ' . $this->quote(
+						isset($column_match[ 0 ]) ? json_encode($value) : serialize($value)
+						);
+					break;
 
 					case 'boolean':
-						$fields[] = $column . ' = ' . ($value ? '1' : '0');
-						break;
+					$fields[] = $column . ' = ' . ($value ? '1' : '0');
+					break;
 
 					case 'integer':
 					case 'double':
 					case 'string':
-						$fields[] = $column . ' = ' . $this->fn_quote($key, $value);
-						break;
+					$fields[] = $column . ' = ' . $this->fn_quote($key, $value);
+					break;
 				}
 			}
 		}
@@ -976,7 +976,7 @@ class medoo
 			'client' => 'CLIENT_VERSION',
 			'version' => 'SERVER_VERSION',
 			'connection' => 'CONNECTION_STATUS'
-		);
+			);
 
 		foreach ($output as $key => $value)
 		{
